@@ -1,7 +1,7 @@
 tempotron-classifier
 ====================
 
-Python implementation of a tempotron classifier for the MNIST database.
+Python implementation of a [tempotron](http://www.cnbc.cmu.edu/cns/papers/nn1643.pdf) classifier for the MNIST database.
 
 Copyright and license
 ---------
