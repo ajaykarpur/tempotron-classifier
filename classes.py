@@ -7,11 +7,13 @@ from skimage import filter as filt
 
 class Classifier(object):
 
-	def __init__(self, traindata, layers = 1):
+	def __init__(self, traindata, iterations = 10):
 		self.traindata = traindata
 		self.testdata = None
 
-		self.temp = Tempotron(len(traindata[0].data))
+		self.iterations = iterations
+
+		self.temp = Tempotron(len(traindata[0].encoded_data))
 
 		self.classify()
 
@@ -23,8 +25,11 @@ class Classifier(object):
 
 	def classify(self):
 
-		for image in self.traindata:
-			self.temp.train(image.data)
+		i = 0
+		while (i < self.iterations):
+			for image in self.traindata:
+				self.temp.train(image.encoded_data)
+			i += 1
 
 	def test(self, testdata):
 
@@ -37,7 +42,7 @@ class Classifier(object):
 		self.FN = 0
 
 		for image in testdata:
-			result = self.temp.test(image.data)
+			result = self.temp.test(image.encoded_data)
 			if (result == 1):
 				if (image.digit == self.traindata[0].digit):
 					self.TP += 1
@@ -57,22 +62,34 @@ class MNISTImage(object):
 		self.digit = digit
 		self.image = image
 		self.data = data
-		# self.encoded_data = self.encode()
+		self.encoded_data = self.encode()
 
 	def encode(self):
 
-		data_array = np.array(self.data).reshape((28,28))
+		data_array = np.array(self.image)#data).reshape((28,28))
 
 		edges = filt.canny(data_array, sigma=3)
 
 		def linear_mapping(data): # using principal components analysis
-			pca = decomposition.PCA(n_components=1)
+			pca = decomposition.PCA(n_components=784)
 			pca.fit(data)
 			mapping = pca.transform(data)
 
 			return mapping
 
-		return linear_mapping(edges)
+		# encoded = linear_mapping(edges)
+
+		encoded = np.array(edges).reshape(784)
+
+		# encoded = []
+
+		# for d in self.data:
+		# 	if (d > 45):
+		# 		encoded.append(1)
+		# 	else:
+		# 		encoded.append(0)
+
+		return encoded
 
 class Tempotron(object):
 

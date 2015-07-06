@@ -42,14 +42,18 @@ from MNIST import imagelist
 
 if __name__ == '__main__':
 
+	title_font = {'fontname':'Arial', 'size':'12', 'color':'black', 'weight':'normal',
+              'verticalalignment':'bottom'}
+	axis_font = {'fontname':'Arial', 'size':'12'}
+
 	train0 = imagelist(0, 'data/train0.jpg')
 	train1 = imagelist(1, 'data/train1.jpg')
 
 	test0 = imagelist(0, 'data/test0.jpg')
 	test1 = imagelist(1, 'data/test1.jpg')
 
-	class0 = Classifier(train0)
-	class0.test(test0)
+	class0 = Classifier(train0[0:10], iterations=800)
+	class0.test(train0[0:10])
 
 	print "class0(test0): ", class0.classification
 	print "TP: ", class0.TP
@@ -57,24 +61,19 @@ if __name__ == '__main__':
 	print "TN: ", class0.TN
 	print "FN: ", class0.FN
 
-	class1 = Classifier(train1)
-	class1.test(test1)
+	fig00 = figure()
+	ax00 = fig00.add_subplot(111)
+	
+	time = range(0, len(train0[0].encoded_data))
+	voltage00 = [class0.temp.V(t) for t in time]
 
-	print "class1(test1): ", class1.classification
-	print "TP: ", class1.TP
-	print "FP: ", class1.FP
-	print "TN: ", class1.TN
-	print "FN: ", class1.FN
+	ax00.plot(time, voltage00)
+	ax00.set_ylabel('Voltage (mV)', **axis_font)
+	ax00.set_xlabel('Time (ms)', **axis_font)
 
-	class1.test(test0)
+	#-----------
 
-	print "class1(test0): ", class1.classification
-	print "TP: ", class1.TP
-	print "FP: ", class1.FP
-	print "TN: ", class1.TN
-	print "FN: ", class1.FN
-
-	class0.test(test1)
+	class0.test(train1[0:10])
 
 	print "class0(test1): ", class0.classification
 	print "TP: ", class0.TP
@@ -82,41 +81,61 @@ if __name__ == '__main__':
 	print "TN: ", class0.TN
 	print "FN: ", class0.FN
 
-	title_font = {'fontname':'Arial', 'size':'12', 'color':'black', 'weight':'normal',
-              'verticalalignment':'bottom'}
-	axis_font = {'fontname':'Arial', 'size':'12'}
-
-	fig0 = figure()
-	ax0 = fig0.add_subplot(111)
+	fig01 = figure()
+	ax01 = fig01.add_subplot(111)
 	
-	time = range(0, len(train0[0].data))
-	voltage0 = [class0.temp.V(t) for t in time]
+	voltage01 = [class0.temp.V(t) for t in time]
 
-	ax0.plot(time, voltage0)
-	ax0.set_ylabel('Voltage (mV)', **axis_font)
-	ax0.set_xlabel('Time (ms)', **axis_font)
+	ax01.plot(time, voltage01)
+	ax01.set_ylabel('Voltage (mV)', **axis_font)
+	ax01.set_xlabel('Time (ms)', **axis_font)
+
+	class1 = Classifier(train1[0:10], iterations=800)
+	class1.test(train1[0:10])
+
+	print "class1(test1): ", class1.classification
+	print "TP: ", class1.TP
+	print "FP: ", class1.FP
+	print "TN: ", class1.TN
+	print "FN: ", class1.FN
+
+	fig11 = figure()
+	ax11 = fig11.add_subplot(111)
+	
+	voltage11 = [class1.temp.V(t) for t in time]
+
+	ax11.plot(time, voltage11)
+	ax11.set_ylabel('Voltage (mV)', **axis_font)
+	ax11.set_xlabel('Time (ms)', **axis_font)
+
+	class1.test(train0[0:10])
+
+	print "class1(test0): ", class1.classification
+	print "TP: ", class1.TP
+	print "FP: ", class1.FP
+	print "TN: ", class1.TN
+	print "FN: ", class1.FN
+
+	fig10 = figure()
+	ax10 = fig10.add_subplot(111)
+	
+	voltage10 = [class0.temp.V(t) for t in time]
+
+	ax10.plot(time, voltage10)
+	ax10.set_ylabel('Voltage (mV)', **axis_font)
+	ax10.set_xlabel('Time (ms)', **axis_font)
 
 	#-----
 
-	fig1 = figure()
-	ax1 = fig1.add_subplot(111)
+	spiketrain = figure()
+	stax = spiketrain.add_subplot(111)
 	
-	time = range(0, len(train1[0].data))
-	voltage1 = [class1.temp.V(t) for t in time]
+	time = range(0, len(train0[0].encoded_data))
+	input0 = train0[0].encoded_data
 
-	ax1.plot(time, voltage1)
-	ax1.set_ylabel('Voltage (mV)', **axis_font)
-	ax1.set_xlabel('Time (ms)', **axis_font)
-
-	fig2 = figure()
-	ax2 = fig2.add_subplot(111)
-	
-	time = range(0, len(train0[0].data))
-	input0 = train0[0].data
-
-	ax2.plot(time, input0)
-	ax2.set_ylabel('pixel value (0-255)', **axis_font)
-	ax2.set_xlabel('pixel number', **axis_font)
+	stax.plot(time, input0)
+	stax.set_ylabel('spike', **axis_font)
+	stax.set_xlabel('pixel number', **axis_font)
 
 	show()
 
