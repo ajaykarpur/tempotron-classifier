@@ -4,7 +4,7 @@ tempotron-classifier
 Python implementation of a [tempotron](http://www.cnbc.cmu.edu/cns/papers/nn1643.pdf) classifier for the MNIST database.
 
 
-![tempotron diagram](https://raw.github.com/ajaykarpur/tempotron-classifer/master/tempotron.PNG)
+![tempotron diagram](https://raw.githubusercontent.com/ajaykarpur/tempotron-classifier/master/tempotron.PNG)
 
 Gütig, Robert, and Haim Sompolinsky. "The tempotron: a neuron that learns spike timing–based decisions." Nature neuroscience 9.3 (2006): 420-428.
 
